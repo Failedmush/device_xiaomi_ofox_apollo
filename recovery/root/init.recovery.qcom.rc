@@ -53,6 +53,12 @@ on fs
     chown system system /dev/ion
     insmod /vendor/lib/modules/exfat.ko
     install_keyring
+service remove-bootctrl-vintf /system/bin/remove-bootctrl-vintf.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
 
 on init
     start vendor.qseecomd
@@ -63,6 +69,8 @@ on boot
     chmod 0777 /system/bin/unified-script.sh
     start unified-script
     setprop sys.usb.config adb
+chmod 0755 /system/bin/remove-bootctrl-vintf.sh
+    start remove-bootctrl-vintf
 
 on property:vendor.sys.listeners.registered=true
     start keymaster-4-0
